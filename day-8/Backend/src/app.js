@@ -1,9 +1,15 @@
 const express =  require('express')
 const noteModel = require('./models/note.model')
-
+const cors = require('cors')
+const path = require('path')
 const app = express()
 
 app.use(express.json())
+app.use(cors())
+app.use(express.static('./public'))
+
+
+
 //POST /api/notes
 app.post('/api/notes' ,async (req , res)=>{
 
@@ -14,13 +20,14 @@ app.post('/api/notes' ,async (req , res)=>{
     })
 
     res.status(201).json({
-        message :"Note created successfully"
+        message :"Note created successfully",
+        note
     })
 
 })
 
 //GET /api/notes
-app.get('/api/notes' , async (re , res)=>{
+app.get('/api/notes' , async (req , res)=>{
 
   const notes = await  noteModel.find()
 
@@ -38,7 +45,7 @@ app.delete('/api/notes/:id' , async (req ,res)=>{
     await noteModel.findByIdAndDelete(id)
 
      res.status(200).json({
-        message :"Note deleted successfully"
+        message :"Note deleted successfully",
      })
      
 })
@@ -56,5 +63,11 @@ app.patch('/api/notes/:id' , async (req , res)=>{
    })
 })
 
+
+
+app.use('*name' , (req , res)=>{
+  res.sendFile(path.join(__dirname ,'..','/public/index.html'));
+  
+})
 
 module.exports = app
