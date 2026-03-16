@@ -8,17 +8,27 @@ app.use(express.json())
 app.post('/notes' , async (req , res)=>{
     const {title , description}=req.body
 
-   const note = await noteModel.create({
+   const notes = await noteModel.create({
         title ,description
     })
 
     res.status(201).json({
         message : "note created successfully",
-        note
+        notes
     })
+})
+
+app.get('/notes' , async(req , res)=>{
+
+   const notes = await noteModel.find()
+
+   res.status(200).json({
+    message : "notes fetched successfully",
+    notes
+   })
+
 })
 
 module.exports = app
 
 
-//fL2c3HyftGZhO0yf  mongodb+srv://sachin:fL2c3HyftGZhO0yf@cluster0.q7vmfbb.mongodb.net/
